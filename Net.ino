@@ -14,23 +14,23 @@ double temperatureToSend = 0;
 //MAC address of the ethernet shield
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-char server[] = "lasseeiler.dk"; // Domain to use for DNS lookup
+char server[] = "192.168.1.219"; // Domain to use for DNS lookup
 
 
 
 // Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192,168,0,177);
+IPAddress ip(192,168,1,177);
 
 EthernetClient client;
 
 void net_setup()
 {
-  if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
+  //if (Ethernet.begin(mac) == 0) {
+  //  Serial.println("Failed to configure Ethernet using DHCP");
     
     // Try manual IP
     Ethernet.begin(mac, ip);
-  }
+  //}
   // Ethernet needs a second to initialize
   nextRetryMillis = millis()+1000;
 }
@@ -49,18 +49,18 @@ void net_loop()
       switch(currentTask)
       {
         case 1: // Get/set status
-          client.print("GET /it2/status.php?code=");
+          client.print("GET /IT2/RoastIO/RoasterStatus.aspx?code=");
           client.print(statusCodeToSend);
           break;
         case 2: // Load profile
-          client.print("GET /it2/getprofile");
+          client.print("GET /IT2/RoastIO/GetProfile.aspx");
           break;
         case 3: // Send current temperature
-          client.print("GET /it2/receiveCurrentTemperature.php?temperature=");
+          client.print("GET /IT2/RoastIO/ReceiveCurrentTemperature.aspx?temperature=");
           client.print(temperatureToSend);
           break;
         case 4: // Send current temperature
-          client.print("GET /it2/receiveRoastData.php?roastdata=");
+          client.print("GET /IT2/RoastIO/ReceiveRoastData.aspx?roastdata=");
           client.print(helper_getElapsedSeconds());
           client.print(";");
           client.print(tc_getLastReadTemperature());
@@ -72,11 +72,11 @@ void net_loop()
           client.print(currentRoastingEffect);
           break;
         case 5: // Get manual roast target temperature
-          client.print("GET /it2/getmanroasttemp.php");
+          client.print("GET /IT2/RoastIO/GetManualRoastTemperature.aspx");
           break;
       }
       client.println(" HTTP/1.1");
-      client.println("Host: lasseeiler.dk");
+      client.println("Host: 192.168.1.219");
       client.println("Connection: close");
       client.println();        
       

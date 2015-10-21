@@ -68,7 +68,7 @@ void helper_insertBulb()
 
 bool helper_isBulbInserted()
 {
-	return (digitalRead(bulbPositionPin) == HIGH) && (bulbDesiredPosition = 1);
+	return (digitalRead(bulbPositionPin) == HIGH) && (bulbDesiredPosition == 1);
 }
 
 void helper_ejectBulb()
@@ -79,5 +79,5 @@ void helper_ejectBulb()
 
 bool helper_isBulbEjected()
 {
-	return (digitalRead(bulbPositionPin) == LOW) && (bulbDesiredPosition = 0);
+	return (digitalRead(bulbPositionPin) == LOW) && (bulbDesiredPosition == 0);
 }

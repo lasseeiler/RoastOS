@@ -246,6 +246,9 @@ void handleReceivedStatus(int newStatusCode)
 				setStatus(401); //Status code not allowed
 			}
 			break;
+		case 401: //Error
+			setStatus(401);
+			break;
 	}
 }
 
