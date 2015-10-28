@@ -207,7 +207,7 @@ void handleReceivedStatus(int newStatusCode)
 			{
 				setStatus(401); //Status code not allowed
 			}
-			break;			
+			break;	
 		case 115: //Start profile roast
 			if (statusCode == 110)
 			{
@@ -216,6 +216,13 @@ void handleReceivedStatus(int newStatusCode)
 			else
 			{
 				setStatus(401); //Status code not allowed
+			}
+			break;
+		case 145: // Remove profile
+			if(statusCode == 110)
+			{
+				profileLoaded = false;
+				setStatus(30);
 			}
 			break;
 		case 205: //Start manual roasting

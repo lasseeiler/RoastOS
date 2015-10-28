@@ -14,7 +14,7 @@ double temperatureToSend = 0;
 //MAC address of the ethernet shield
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-char server[] = "192.168.1.219"; // Domain to use for DNS lookup
+char server[] = "192.168.1.199"; // Domain to use for DNS lookup
 
 
 
