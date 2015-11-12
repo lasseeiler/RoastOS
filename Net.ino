@@ -14,7 +14,7 @@ double temperatureToSend = 0;
 //MAC address of the ethernet shield
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 
-char server[] = "192.168.1.199"; // Domain to use for DNS lookup
+char server[] = "webinterface.il-torrefattore.dk"; // Domain to use for DNS lookup
 
 
 
@@ -49,18 +49,18 @@ void net_loop()
       switch(currentTask)
       {
         case 1: // Get/set status
-          client.print("GET /IT2/RoastIO/RoasterStatus.aspx?code=");
+          client.print("GET /RoastIO/RoasterStatus.aspx?code=");
           client.print(statusCodeToSend);
           break;
         case 2: // Load profile
-          client.print("GET /IT2/RoastIO/GetProfile.aspx");
+          client.print("GET /RoastIO/GetProfile.aspx");
           break;
         case 3: // Send current temperature
-          client.print("GET /IT2/RoastIO/ReceiveCurrentTemperature.aspx?temperature=");
+          client.print("GET /RoastIO/ReceiveCurrentTemperature.aspx?temperature=");
           client.print(temperatureToSend);
           break;
         case 4: // Send current temperature
-          client.print("GET /IT2/RoastIO/ReceiveRoastData.aspx?roastdata=");
+          client.print("GET /RoastIO/ReceiveRoastData.aspx?roastdata=");
           client.print(helper_getElapsedSeconds());
           client.print(";");
           client.print(tc_getLastReadTemperature());
@@ -72,11 +72,11 @@ void net_loop()
           client.print(currentRoastingEffect);
           break;
         case 5: // Get manual roast target temperature
-          client.print("GET /IT2/RoastIO/GetManualRoastTemperature.aspx");
+          client.print("GET /RoastIO/GetManualRoastTemperature.aspx");
           break;
       }
       client.println(" HTTP/1.1");
-      client.println("Host: 192.168.1.219");
+      client.println("Host: webinterface.il-torrefattore.dk");
       client.println("Connection: close");
       client.println();        
       
