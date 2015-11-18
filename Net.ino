@@ -243,3 +243,8 @@ bool net_getManualRoastTargetTemperature()
     return false;
   }  
 }
+
+bool net_isBusy()
+{
+  return currentTask != 0;
+}

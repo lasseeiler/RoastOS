@@ -13,7 +13,7 @@ const int triacOutputPin = 3;
 
 const long tickInterval = 1000;
 const long tickInterval_Status = 2000;
-const long tickInterval_CurrentTemperature = 1000;
+const long tickInterval_CurrentTemperature = 3000;
 const long tickInterval_RoastingData = 5000;
 const long tickInterval_ManualTemp = 2000;
 const int prof_profileArraySize = 20;
@@ -87,10 +87,14 @@ void loop()
 	    	}
 	    	else
 	    	{
-	    		setStatus(30);
+	    		if(!net_isBusy())
+	    		{
+	    			setStatus(30);
+	    		}
 	    	}
 	    	break;
 	    case 401: //Ending roast
+	    	dcSetLevel(0);
 	    	sendCurrentTemperature();
 	    	break;
 	}
@@ -106,8 +110,11 @@ void startProfileRoast()
 	}
 	else
 	{
-		roastingStartMillis = millis();
-		setStatus(130);
+		if(!net_isBusy())
+	    {
+			roastingStartMillis = millis();
+			setStatus(130);
+		}
 	}
 }
 void startManualRoast()
@@ -120,8 +127,11 @@ void startManualRoast()
 	}
 	else
 	{
-		roastingStartMillis = millis();
-		setStatus(220);
+		if(!net_isBusy())
+	    {
+			roastingStartMillis = millis();
+			setStatus(220);
+		}
 	}
 }
 void sendCurrentTemperature()
