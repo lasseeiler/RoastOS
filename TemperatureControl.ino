@@ -181,18 +181,24 @@ double tc_getCurrentTemperature()
 {
 	// Serial.println("getCurrentTemperature");
 	double tempSensorValue = analogRead(tempSensorPin);
+	double knownResistance = 1000.0;
+	double measuredResistance = 0.0;
 	double returnTemp = 0.0;
+	//double betaC = 3950.0; //Kelvin
+	//double referenceTemperature = 25.0;
+	//double resistanceAtReference = 100000.0; //Ohm
+	double coefA = 0.0008087537565;
+	double coefB = 0.0002010885617;
+	double coefC = 0.0000001508150106;
 
-	// if (tempSensorValue < 152)
-	// {
-	// 	returnTemp = 37.383 * log(tempSensorValue) - 83.037;
-	// }
-	// else 
-	// {
-	// 	returnTemp = 0.0000000006*pow(tempSensorValue, 4.0) - 0.0000007*pow(tempSensorValue, 3.0) + 0.0002*pow(tempSensorValue, 2.0) + 0.2038*tempSensorValue + 70.891;
-	// }
+	//Goodbye ye olde faithful formulae! Many were the good times we had together.
+	//returnTemp = 0.000000000002235240435*pow(tempSensorValue, 5.0) - 0.000000005008836496*pow(tempSensorValue, 4.0) + 0.000004523905046*pow(tempSensorValue, 3.0) - 0.002014934182*pow(tempSensorValue, 2.0) + 0.5996981289*tempSensorValue + 26.81100308;
 
-	returnTemp = 0.000000000002235240435*pow(tempSensorValue, 5.0) - 0.000000005008836496*pow(tempSensorValue, 4.0) + 0.000004523905046*pow(tempSensorValue, 3.0) - 0.002014934182*pow(tempSensorValue, 2.0) + 0.5996981289*tempSensorValue + 26.81100308;
+	measuredResistance = ((1024.0 * knownResistance) / tempSensorValue) - knownResistance;
+
+	returnTemp = pow(coefA + (coefB * log(measuredResistance)) + (coefC * pow(log(measuredResistance),3.0)),-1.0) - 273.15;
+
+	//returnTemp = pow((1.0 / (273.15 + referenceTemperature)) + ((1.0 / betaC) * log(measuredResistance / resistanceAtReference)),-1.0) - 273.15;
 
 	return returnTemp;
 }
