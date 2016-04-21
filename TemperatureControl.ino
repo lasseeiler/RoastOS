@@ -179,14 +179,10 @@ double tc_getCurrentTargetPace()
 
 double tc_getCurrentTemperature()
 {
-	// Serial.println("getCurrentTemperature");
 	double tempSensorValue = analogRead(tempSensorPin);
 	double knownResistance = 1000.0;
 	double measuredResistance = 0.0;
 	double returnTemp = 0.0;
-	//double betaC = 3950.0; //Kelvin
-	//double referenceTemperature = 25.0;
-	//double resistanceAtReference = 100000.0; //Ohm
 	double coefA = 0.0008087537565;
 	double coefB = 0.0002010885617;
 	double coefC = 0.0000001508150106;
@@ -197,8 +193,6 @@ double tc_getCurrentTemperature()
 	measuredResistance = ((1024.0 * knownResistance) / tempSensorValue) - knownResistance;
 
 	returnTemp = pow(coefA + (coefB * log(measuredResistance)) + (coefC * pow(log(measuredResistance),3.0)),-1.0) - 273.15;
-
-	//returnTemp = pow((1.0 / (273.15 + referenceTemperature)) + ((1.0 / betaC) * log(measuredResistance / resistanceAtReference)),-1.0) - 273.15;
 
 	return returnTemp;
 }
