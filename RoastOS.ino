@@ -10,6 +10,7 @@ const int tempSensorPin = A1;
 const int bulbDesiredPositionPin = 6;
 const int bulbPositionPin = 7;
 const int triacOutputPin = 3;
+const int rotaryMotorPin = 9;
 
 const long tickInterval = 1000;
 const long tickInterval_Status = 2000;
@@ -17,6 +18,8 @@ const long tickInterval_CurrentTemperature = 3000;
 const long tickInterval_RoastingData = 5000;
 const long tickInterval_ManualTemp = 2000;
 const int prof_profileArraySize = 20;
+const int netInputBufferMaxLength = 200;
+
 long lastTickMillis = 0;
 long lastTickMillis_Status = 0;
 long lastTickMillis_CurrentTemperature = 0;
@@ -31,8 +34,6 @@ int currentRoastingEffect = 0;
 int bulbDesiredPosition = 0;
 double manualRoastTargetTemperature = 0;
 
-const int netInputBufferMaxLength = 200;
-
 void setup()
 {
 	Serial.begin(57600);
@@ -40,6 +41,7 @@ void setup()
 	pinMode(tempSensorPin, INPUT);
 	pinMode(bulbPositionPin, INPUT);
 	pinMode(bulbDesiredPositionPin, OUTPUT);
+	pinMode(rotaryMotorPin, OUTPUT);
 	initDimmerControl(triacOutputPin, 0); //0 = digital pin 2
 	tc_resetTemperatures();
 	net_setup();
@@ -65,6 +67,7 @@ void loop()
 	    	break;
 	    case 130: //Roasting with profile
 	    	runTemperatureCycle();
+	    	helper_startDrumRoll();
 	    	sendCurrentTemperature();
 	    	sendRoastingData();
 	    	break;
@@ -74,6 +77,7 @@ void loop()
 	    	break;
 	    case 220: //Roasting manually
 	    	runTemperatureCycle();
+	    	helper_startDrumRoll();
 	    	getManualRoastTargetTemperature();
 	    	sendCurrentTemperature();
 	    	sendRoastingData();
@@ -81,6 +85,7 @@ void loop()
 	    case 310: //Ending roast
 	    	profileLoaded = false;
 	    	dcSetLevel(0);
+	    	helper_stopDrumRoll();
 	    	if(!helper_isBulbEjected())
 	    	{
 	    		helper_ejectBulb();
@@ -93,8 +98,9 @@ void loop()
 	    		}
 	    	}
 	    	break;
-	    case 401: //Ending roast
+	    case 401: //Error, ending roast
 	    	dcSetLevel(0);
+	    	helper_stopDrumRoll();
 	    	sendCurrentTemperature();
 	    	break;
 	}

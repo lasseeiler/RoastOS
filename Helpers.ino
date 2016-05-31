@@ -81,3 +81,13 @@ bool helper_isBulbEjected()
 {
 	return (digitalRead(bulbPositionPin) == LOW) && (bulbDesiredPosition == 0);
 }
+
+void helper_startDrumRoll()
+{
+	digitalWrite(rotaryMotorPin, HIGH);
+}
+
+void helper_stopDrumRoll()
+{
+	digitalWrite(rotaryMotorPin, LOW);
+}
