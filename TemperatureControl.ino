@@ -97,7 +97,7 @@ int tc_getRoastingEffectAdjustment()
 	
 	if (currentPaceCase == 1 or currentPaceCase == 3)
 	{
-		steps = -steps * 2;
+		steps = -steps * 1; //Changed from 2 to 1 to allow for slower cooldown
 	}
 	return steps;
 }
