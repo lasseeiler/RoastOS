@@ -80,23 +80,23 @@ void net_loop()
       client.println("Connection: close");
       client.println();        
       
-      Serial.print("Connection initiated:            ");
+      //Serial.print("Connection initiated:            ");
       switch(currentTask)
       {
         case 1: // Get/set status
-          Serial.println("#");
+          //Serial.println("#");
           break;
         case 2: // Load profile
-          Serial.println("# #");
+          //Serial.println("# #");
           break;
         case 3: // Send current temperature
-          Serial.println("# # #");
+          //Serial.println("# # #");
           break;
         case 4: // Send current temperature
-          Serial.println("# # # #");
+          //Serial.println("# # # #");
           break;
         case 5: // Get man roast temp
-          Serial.println("# # # # #");
+          //Serial.println("# # # # #");
           break;
       }
     } 
@@ -141,7 +141,7 @@ void net_loop()
               profileLoaded = true;
               setStatus(110);
               //Debug
-              prof_PrintProfileToSerial();
+              //prof_PrintProfileToSerial();
             }
             else
             {
@@ -183,7 +183,7 @@ bool net_startProfileLoad()
 
 void net_profileLoadFailed()
 {
-  Serial.println("Error loading profile");
+  //Serial.println("Error loading profile");
 }
 
 bool net_sendStatusCode(int statusCode)
@@ -206,8 +206,8 @@ bool net_sendCurrentTemperature(double temperature)
   {
     currentTask = 3; //Send temperature
     temperatureToSend = temperature;
-    Serial.print("Sending temperature: ");
-    Serial.println(temperature);
+    //Serial.print("Sending temperature: ");
+    //Serial.println(temperature);
     return true;
   }
   else
@@ -221,7 +221,7 @@ bool net_sendRoastingData()
   if(currentTask == 0)
   {
     currentTask = 4; //Send roasting data
-    Serial.println("Sending roasting data"); 
+    //Serial.println("Sending roasting data"); 
     return true;
   }
   else
@@ -235,7 +235,7 @@ bool net_getManualRoastTargetTemperature()
   if(currentTask == 0)
   {
     currentTask = 5; //Get manual roast temp.
-    Serial.println("Getting man. roast target temp."); 
+    //Serial.println("Getting man. roast target temp."); 
     return true;
   }
   else

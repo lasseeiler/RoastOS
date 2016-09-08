@@ -1,5 +1,5 @@
 const int tempIntervalArrayLength = 3;
-const int temperatureIntervals[tempIntervalArrayLength] = {5,20,999};  // Could possibly later be defined from external source
+const int temperatureIntervals[tempIntervalArrayLength] = {1,5,999};  // Could possibly later be defined from external source
 const double temperaturePaces[tempIntervalArrayLength] = {0.1,0.2,1.0};  // Could possibly later be defined from external source
 const int tempArrayLength = 5;
 double temperatures[tempArrayLength];
