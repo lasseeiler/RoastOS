@@ -12,7 +12,7 @@ const int bulbPositionPin = 7;
 const int triacOutputPin = 3;
 const int rotaryMotorPin = 9;
 
-const long tickInterval = 1000;
+const long tickInterval = 250;
 const long tickInterval_Status = 2000;
 const long tickInterval_CurrentTemperature = 3000;
 const long tickInterval_RoastingData = 5000;
