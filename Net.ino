@@ -19,7 +19,7 @@ char server[] = "webinterface.il-torrefattore.dk"; // Domain to use for DNS look
 
 
 // Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192,168,1,177);
+IPAddress ip(192,168,0,222);
 
 EthernetClient client;
 
