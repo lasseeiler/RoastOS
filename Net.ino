@@ -1,9 +1,5 @@
-#include <SPI.h>
-#include <Ethernet.h>
-
 int currentTask = 0;
 bool callStarted = false;
-long nextRetryMillis = 0;
 bool readingInput = false;
 char inputString[netInputBufferMaxLength];
 char* inputStringPtr = inputString;
@@ -11,104 +7,58 @@ int statusCodeToSend = 0;
 int tmpStatusCode = 0;
 double temperatureToSend = 0;
 
-//MAC address of the ethernet shield
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-
-char server[] = "webinterface.il-torrefattore.dk"; // Domain to use for DNS lookup
-
-
-
-// Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192,168,0,222);
-
-EthernetClient client;
-
 void net_setup()
 {
-  //if (Ethernet.begin(mac) == 0) {
-  //  Serial.println("Failed to configure Ethernet using DHCP");
-    
-    // Try manual IP
-    Ethernet.begin(mac, ip);
-  //}
-  // Ethernet needs a second to initialize
-  nextRetryMillis = millis()+1000;
 }
 
 void net_loop()
 {
+  bool expectResponse = false;
 
-  if(currentTask > 0 && !callStarted && nextRetryMillis < millis())
+  if(currentTask > 0 && !callStarted)
   {
-    //Disconnect any live connection
-    client.stop();
-
-    if (client.connect(server, 80)) {
-      callStarted = true;
-
-      switch(currentTask)
-      {
-        case 1: // Get/set status
-          client.print("GET /RoastIO/RoasterStatus.aspx?code=");
-          client.print(statusCodeToSend);
-          break;
-        case 2: // Load profile
-          client.print("GET /RoastIO/GetProfile.aspx");
-          break;
-        case 3: // Send current temperature
-          client.print("GET /RoastIO/ReceiveCurrentTemperature.aspx?temperature=");
-          client.print(temperatureToSend);
-          break;
-        case 4: // Send current temperature
-          client.print("GET /RoastIO/ReceiveRoastData.aspx?roastdata=");
-          client.print(helper_getElapsedSeconds());
-          client.print(";");
-          client.print(tc_getLastReadTemperature());
-          client.print(";");
-          client.print(currentPace);
-          client.print("-");
-          client.print(currentTargetPace);
-          client.print("-");
-          client.print(currentRoastingEffect);
-          break;
-        case 5: // Get manual roast target temperature
-          client.print("GET /RoastIO/GetManualRoastTemperature.aspx");
-          break;
-      }
-      client.println(" HTTP/1.1");
-      client.println("Host: webinterface.il-torrefattore.dk");
-      client.println("Connection: close");
-      client.println();        
-      
-      //Serial.print("Connection initiated:            ");
-      switch(currentTask)
-      {
-        case 1: // Get/set status
-          //Serial.println("#");
-          break;
-        case 2: // Load profile
-          //Serial.println("# #");
-          break;
-        case 3: // Send current temperature
-          //Serial.println("# # #");
-          break;
-        case 4: // Send current temperature
-          //Serial.println("# # # #");
-          break;
-        case 5: // Get man roast temp
-          //Serial.println("# # # # #");
-          break;
-      }
-    } 
-    else
+    switch(currentTask)
     {
-        nextRetryMillis = millis()+1000;
+      case 1: // Get/set status
+        Serial.print("1/");
+        Serial.print(statusCodeToSend);
+        Serial.print("/%");
+        callStarted = true;
+        break;
+      case 2: // Load profile
+        Serial.print("2%");
+        callStarted = true;
+        break;
+      case 3: // Send current temperature
+        Serial.print("3/");
+        Serial.print(temperatureToSend);
+        Serial.print("/%");
+        currentTask = 0;
+        break;
+      case 4: // Send roast data
+        Serial.print("4/");
+        Serial.print(helper_getElapsedSeconds());
+        Serial.print(";");
+        Serial.print(tc_getLastReadTemperature());
+        Serial.print(";");
+        Serial.print(currentPace);
+        Serial.print("-");
+        Serial.print(currentTargetPace);
+        Serial.print("-");
+        Serial.print(currentRoastingEffect);
+        Serial.print("/%");
+        currentTask = 0;
+        break;
+      case 5: // Get manual roast target temperature
+        Serial.print("5%");
+        callStarted = true;
+        break;
     }
   }
 
-  if(callStarted && currentTask > 0 && client.available())
+  if(callStarted && currentTask > 0 && Serial.available())
   {
-    char c = client.read();
+    char c = Serial.read();
     if(c == '{')
     {
       readingInput = true;
@@ -118,7 +68,7 @@ void net_loop()
       *inputStringPtr = c;
       inputStringPtr++; // Maybe make some check to ensure we don't exceed array size thus rebooting arduino
     }
-    if(!client.available())
+    if(c=='%')
     {
       readingInput = false;
 
@@ -147,12 +97,6 @@ void net_loop()
             {
               net_profileLoadFailed();
             }
-            flushInputBuffer(inputString, netInputBufferMaxLength, ' ');
-            inputStringPtr = inputString;
-            break;
-          case 3:
-          case 4:
-            currentTask = 0;
             flushInputBuffer(inputString, netInputBufferMaxLength, ' ');
             inputStringPtr = inputString;
             break;

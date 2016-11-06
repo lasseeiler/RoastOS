@@ -1,9 +1,4 @@
 #include <math.h>
-#include <Helpers.ino>
-#include <DimmerControl.ino>
-#include <Profile.ino>
-#include <TemperatureControl.ino>
-#include <Net.ino>
 
 //Pins
 const int tempSensorPin = A1;
@@ -36,7 +31,7 @@ double manualRoastTargetTemperature = 0;
 
 void setup()
 {
-	//Serial.begin(57600);
+	Serial.begin(115200);
 	
 	pinMode(tempSensorPin, INPUT);
 	pinMode(bulbPositionPin, INPUT);
