@@ -31,7 +31,7 @@ double manualRoastTargetTemperature = 0;
 
 void setup()
 {
-	Serial.begin(115200);
+	Serial.begin(38400);
 	
 	pinMode(tempSensorPin, INPUT);
 	pinMode(bulbPositionPin, INPUT);
