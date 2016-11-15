@@ -9,6 +9,11 @@ double temperatureToSend = 0;
 
 void net_setup()
 {
+  delay(8000);
+  while(Serial.available())
+  {
+    Serial.read();
+  }
 }
 
 void net_loop()
