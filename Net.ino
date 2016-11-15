@@ -22,18 +22,18 @@ void net_loop()
       case 1: // Get/set status
         Serial.print("1/");
         Serial.print(statusCodeToSend);
-        Serial.print("/%");
+        Serial.print("/$");
         callStarted = true;
         break;
       case 2: // Load profile
-        Serial.print("2%");
+        Serial.print("2$");
         callStarted = true;
         break;
       case 3: // Send current temperature
         Serial.print("3/");
         Serial.print(temperatureToSend);
-        Serial.print("/%");
-        currentTask = 0;
+        Serial.print("/$");
+        callStarted = true;
         break;
       case 4: // Send roast data
         Serial.print("4/");
@@ -46,11 +46,11 @@ void net_loop()
         Serial.print(currentTargetPace);
         Serial.print("-");
         Serial.print(currentRoastingEffect);
-        Serial.print("/%");
-        currentTask = 0;
+        Serial.print("/$");
+        callStarted = true;
         break;
       case 5: // Get manual roast target temperature
-        Serial.print("5%");
+        Serial.print("5$");
         callStarted = true;
         break;
     }
@@ -75,7 +75,6 @@ void net_loop()
       switch (currentTask)
       {
           case 1:
-            currentTask = 0;
             tmpStatusCode = helper_readStatus(inputString);
             if(tmpStatusCode>0)
             {
@@ -85,7 +84,6 @@ void net_loop()
             inputStringPtr = inputString;
             break;
           case 2:
-            currentTask = 0;
             if(prof_ReadProfile(inputString))
             {
               profileLoaded = true;
@@ -101,12 +99,12 @@ void net_loop()
             inputStringPtr = inputString;
             break;
           case 5:
-            currentTask = 0;
             manualRoastTargetTemperature = helper_readManualRoastTargetTemp(inputString);
             flushInputBuffer(inputString, netInputBufferMaxLength, ' ');
             inputStringPtr = inputString;
             break;
       }
+      currentTask = 0;
       callStarted = false;
     }
   }
