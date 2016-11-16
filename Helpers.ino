@@ -5,7 +5,7 @@ String doubleToString(double input)
 	return String(output);
 }
 
-void flushInputBuffer(char array[], int length, char charToInsert)
+void flushInputBuffer(char array[], int length, char charToInsert) // This function could be improved by using memset function
 {	
 	for(int i = 0; i<length; i++)
 	{

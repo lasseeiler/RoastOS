@@ -12,7 +12,7 @@ void net_setup()
   delay(8000);
   while(Serial.available())
   {
-    Serial.read();
+    Serial.read(); //Empty serial buffer
   }
 }
 
@@ -93,8 +93,6 @@ void net_loop()
             {
               profileLoaded = true;
               setStatus(110);
-              //Debug
-              //prof_PrintProfileToSerial();
             }
             else
             {

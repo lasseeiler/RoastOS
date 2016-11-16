@@ -174,8 +174,6 @@ void sendStatus()
 	{
 		if (net_sendStatusCode(statusCode))
 		{
-			//Serial.print("Sending status code: ");
-			//Serial.println(statusCode);
 			lastTickMillis_Status = millis();
 		}
 	}
@@ -192,8 +190,6 @@ void sendRoastingData()
 }
 void handleReceivedStatus(int newStatusCode)
 {
-	//Serial.print("Received status code: ");
-	//Serial.println(newStatusCode);
 	switch(newStatusCode)
 	{
 		case 30: //Online, ready
