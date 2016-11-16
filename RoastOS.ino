@@ -1,9 +1,4 @@
 #include <math.h>
-#include <Helpers.ino>
-#include <DimmerControl.ino>
-#include <Profile.ino>
-#include <TemperatureControl.ino>
-#include <Net.ino>
 
 //Pins
 const int tempSensorPin = A1;
@@ -36,7 +31,7 @@ double manualRoastTargetTemperature = 0;
 
 void setup()
 {
-	//Serial.begin(57600);
+	Serial.begin(38400);
 	
 	pinMode(tempSensorPin, INPUT);
 	pinMode(bulbPositionPin, INPUT);
@@ -179,8 +174,6 @@ void sendStatus()
 	{
 		if (net_sendStatusCode(statusCode))
 		{
-			//Serial.print("Sending status code: ");
-			//Serial.println(statusCode);
 			lastTickMillis_Status = millis();
 		}
 	}
@@ -197,8 +190,6 @@ void sendRoastingData()
 }
 void handleReceivedStatus(int newStatusCode)
 {
-	//Serial.print("Received status code: ");
-	//Serial.println(newStatusCode);
 	switch(newStatusCode)
 	{
 		case 30: //Online, ready
