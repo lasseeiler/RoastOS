@@ -270,4 +270,3 @@ void setStatus(int newStatusCode)
 {
 	statusCode = newStatusCode;
 }
-//testcommit
